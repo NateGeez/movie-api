@@ -3,8 +3,6 @@ const express = require('express'),
 
 const app = express();
 
-app.use(morgan('common'));
-
 let topMovies = [
   {
     title: 'Lord of the Rings',
@@ -48,6 +46,10 @@ let topMovies = [
   },
 ];
 
+// Logging usage to terminal
+app.use(morgan('common'));
+
+// Accessing files in public folder
 app.use(express.static('public'));
 
 // GET requests
@@ -59,7 +61,13 @@ app.get('/movies', (req, res) => {
   res.json(topMovies);
 });
 
-//listen for requests
+// Error-handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Listen for requests
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
