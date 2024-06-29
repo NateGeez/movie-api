@@ -15,7 +15,7 @@ const Movies = Models.Movie,
 // });
 
 mongoose.connect(process.env.CONNECTION_URI, {
-  useNewUrlIParser: true,
+  useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
