@@ -9,44 +9,7 @@ const Movies = Models.Movie,
   Users = Models.User;
 (Genres = Models.Genre), (Directors = Models.Director);
 
-mongoose.connect('mongodb://localhost:27017/cfDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// mongoose.connect(process.env.CONNECTION_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri =
-  'mongodb+srv://nathangefaller:Mowgl!2872@nategeez.6nkjvla.mongodb.net/?appName=NateGeez';
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db('admin').command({ ping: 1 });
-    console.log(
-      'Pinged your deployment. You successfully connected to MongoDB!'
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+mongoose.connect(process.env.CONNECTION_URI);
 
 const app = express();
 
