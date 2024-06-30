@@ -9,15 +9,15 @@ const Movies = Models.Movie,
   Users = Models.User;
 (Genres = Models.Genre), (Directors = Models.Director);
 
-// mongoose.connect('mongodb://localhost:27017/cfDB', {
-//   useNewUrlIParser: true,
-//   useUnifiedTopology: true,
-// });
-
-mongoose.connect(process.env.CONNECTION_URI, {
+mongoose.connect('mongodb://localhost:27017/cfDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+// mongoose.connect(process.env.CONNECTION_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri =
