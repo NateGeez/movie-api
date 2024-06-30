@@ -9,6 +9,17 @@ const Movies = Models.Movie,
   Users = Models.User;
 (Genres = Models.Genre), (Directors = Models.Director);
 
+// console log to verify access to environment variable
+console.log('MongoDB URI:', process.env.CONNECTION_URI);
+
+mongoose
+  .connect(process.env.CONNECTION_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.log('MongoDB connection error:', err));
+
 mongoose.connect(process.env.CONNECTION_URI);
 
 const app = express();
@@ -21,7 +32,11 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+let allowedOrigins = [
+  'https://natesmovieflix-742bdbb68d51.herokuapp.com/',
+  'http://localhost:8080',
+  'http://testsite.com',
+];
 
 app.use(
   cors({
