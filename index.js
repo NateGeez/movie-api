@@ -3,12 +3,7 @@ const express = require('express'),
   uuid = require('uuid'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
-  Models = require('./models.js'),
-  passport = require('passport');
-
-require('./passport');
-require('dotenv').config();
-let auth = require('./auth')(app);
+  Models = require('./models.js');
 
 const Movies = Models.Movie,
   Users = Models.User;
@@ -22,12 +17,13 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
-    console.log('MongoDB connected');
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-  });
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.log('MongoDB connection error:', err));
+
+mongoose.connect(process.env.CONNECTION_URI{
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 const app = express();
 
@@ -60,22 +56,29 @@ app.use(
   })
 );
 
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
+
 // Default text response
 app.get('/', (req, res) => {
   res.send('Welcome to MyFlix!');
 });
 
 // Return all movies
-app.get('/movies', async (req, res) => {
-  await Movies.find()
-    .then((movies) => {
-      res.status(201).json(movies);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/movies',
+  async (req, res) => {
+    await Movies.find()
+      .then((movies) => {
+        res.status(201).json(movies);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Return data about a single movie
 app.get(
@@ -95,16 +98,17 @@ app.get(
 
 // Return data about a genre
 app.get(
-  '/movies/genre/:Name',
+  '/genre/:Name',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const movies = await Movies.findOne({ 'Genre.Name': req.params.Name });
+      const movies = await Movies.find({ 'Genre.Name': req.params.Name });
       if (!movies || movies.length === 0) {
         return res.status(404).send('Genre not found');
       }
-      // Return genre information
-      res.json(movie.genre);
+      // Extract genre descriptions from movies
+      const genreDescriptions = movies.map((movie) => movie.Genre.Description);
+      res.json(genreDescriptions);
     } catch (err) {
       console.error(err);
       res.status(500).send('Error fetching genre');
@@ -114,21 +118,21 @@ app.get(
 
 // Return data about a director
 app.get(
-  '/movies/director/:Name',
+  '/director/:Name',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const movies = await Movies.findOne({ 'Director.Name': req.params.Name });
+      const movies = await Movies.find({ 'Director.Name': req.params.Name });
       if (!movies || movies.length === 0) {
         return res.status(404).send('Director not found');
       }
       // Extract director information from movies
-      const directorsInfo = {
+      const directorsInfo = movies.map((movie) => ({
         Name: movie.Director.Name,
         Bio: movie.Director.Bio,
         Birth: movie.Director.Birth,
         Death: movie.Director.Death,
-      };
+      }));
       res.json(directorsInfo);
     } catch (err) {
       console.error(err);
@@ -221,13 +225,12 @@ app.put(
     }
     // check the validation object for errors
     let errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
 
     // Hash the password
-    let hashedPassword = Users.hashPassword(req.body.Password);
+    let hashedPassword = await Users.hashPassword(req.body.Password);
 
     // Condition ends
     await Users.findOneAndUpdate(
@@ -235,7 +238,7 @@ app.put(
       {
         $set: {
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
