@@ -20,11 +20,6 @@ mongoose
   .then(() => console.log('MongoDB connected successfully'))
   .catch((err) => console.log('MongoDB connection error:', err));
 
-mongoose.connect(process.env.CONNECTION_URI{
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
 const app = express();
 
 const { check, validationResult } = require('express-validator');
@@ -66,19 +61,16 @@ app.get('/', (req, res) => {
 });
 
 // Return all movies
-app.get(
-  '/movies',
-  async (req, res) => {
-    await Movies.find()
-      .then((movies) => {
-        res.status(201).json(movies);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      });
-  }
-);
+app.get('/movies', async (req, res) => {
+  await Movies.find()
+    .then((movies) => {
+      res.status(200).json(movies);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
 
 // Return data about a single movie
 app.get(
@@ -225,12 +217,10 @@ app.put(
     }
     // check the validation object for errors
     let errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-
-    // Hash the password
-    let hashedPassword = await Users.hashPassword(req.body.Password);
 
     // Condition ends
     await Users.findOneAndUpdate(
@@ -238,7 +228,7 @@ app.put(
       {
         $set: {
           Username: req.body.Username,
-          Password: hashedPassword,
+          Password: req.body.Password,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
