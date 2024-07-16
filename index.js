@@ -3,7 +3,8 @@ const express = require('express'),
   uuid = require('uuid'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
-  Models = require('./models.js');
+  Models = require('./models.js'),
+  cors = require('cors');
 
 const Movies = Models.Movie,
   Users = Models.User;
