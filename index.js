@@ -30,10 +30,9 @@ app.use(express.json());
 app.use(morgan('common'));
 app.use(express.static('public'));
 
-const cors = require('cors');
 let allowedOrigins = [
   'https://natesmovieflix-742bdbb68d51.herokuapp.com/',
-  'http://localhost:8080',
+  'http://localhost:3000',
   'http://testsite.com',
 ];
 
