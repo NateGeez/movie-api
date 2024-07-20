@@ -33,6 +33,7 @@ app.use(express.static('public'));
 let allowedOrigins = [
   'https://natesmovieflix-742bdbb68d51.herokuapp.com/',
   'http://localhost:3000',
+  'http://localhost:1234',
   'http://testsite.com',
 ];
 
