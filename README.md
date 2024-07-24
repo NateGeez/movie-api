@@ -4,18 +4,24 @@ This app contains a database with two collections. One collection stores informa
 
 ##Table of Contents
 
-- [Introduction](#Introduction)
-- [Technologies-Used](#Technologies Used)
-- [Setup](#Setup)
-  - [Prerequisites](#Prerequisites)
-  - [Installation](#Installation)
-  - [Configuration](#Configuration)
-- [Usage](#Usage)
-  - [Endpoints](#Endpoints)
-- [Deployment](#Deployment)
+-#Introduction
+-#Deployment
+-#Technologies Used
+-#Setup
+-#Prerequisites
+-#Installation
+-#Configuration
+-#Usage
+-#Endpoints
 
 ##Introduction
 The purpose of this application is to contain a database of movies and allows users to register for an account, add a list of their favorite movies, search for information on movies, directors, and genres.
+
+##Deployment
+
+Deployed on Heroku:
+
+- https://natesmovieflix-742bdbb68d51.herokuapp.com/
 
 ##Technologies Used
 
@@ -37,8 +43,8 @@ The purpose of this application is to contain a database of movies and allows us
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/your-username/myflix-api.git
-cd myflix-api
+git clone https://github.com/NateGeez/myflix-app.git
+cd myflix-app
 ```
 
 2. Install dependencies:
@@ -71,17 +77,11 @@ User can register an account creating a username adding a password, their email,
 
 - GET /movies Retrieve all movies
 - GET /movies/:Title Retrieve data about a specific movie
-- GET /genre/:Name Retrieve data for a specific genre
-- GET /director/:Name Retrieve data for a specific director
+- GET /movies/genre/:Name Retrieve data for a specific genre
+- GET /movies/director/:Name Retrieve data for a specific director
 - POST /users Register a new user
 - GET /users/Username Retrieve user information
 - PUT /users/Username Update user information
 - POST /users/:Username/movies/:MovieID Add a movie to a user's favorites
 - DELETE /users/:Username/movies/:MovieID Remove a movie from a user's favorites
 - DELETE /users/:Username Delete a user account
-
-##Deployment
-
-Deployed on Heroku:
-
-- https://natesmovieflix-742bdbb68d51.herokuapp.com/
