@@ -1,4 +1,4 @@
-#myFlix App
+#myFlix API
 
 This app contains a database with two collections. One collection stores information about users while another stores information about movies.
 
