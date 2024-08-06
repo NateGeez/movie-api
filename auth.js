@@ -23,6 +23,15 @@ module.exports = (router) => {
           user: user,
         });
       }
+
+      if (!user) {
+        console.log('User not found or incorrect credentials');
+        return res.status(400).json({
+          message: 'Something is not right',
+          user: false,
+        });
+      }
+
       req.login(user, { session: false }, (error) => {
         if (error) {
           res.send(error);
