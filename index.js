@@ -207,17 +207,21 @@ app.put(
       return res.status(422).json({ errors: errors.array() });
     }
 
+    // Hash the password if it's present in the request body
+    let updatedUser = {
+      Username: req.body.Username,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday,
+    };
+
+    if (req.body.Password) {
+      updatedUser.Password = Users.hashPassword(req.body.Password);
+    }
+
     // Condition ends
     await Users.findOneAndUpdate(
       { Username: req.params.Username },
-      {
-        $set: {
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday,
-        },
-      },
+      { $set: updatedUser },
       { new: true }
     )
       .then((updatedUser) => {
